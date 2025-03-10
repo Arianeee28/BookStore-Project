@@ -3,6 +3,9 @@ import { SearchBar } from "@/components/search-bar";
 import { BookCard } from "@/components/book-card";
 import { useState } from "react";
 import { type Book } from "@shared/schema";
+import { Link } from "wouter";
+import { Button } from "@/components/ui/button";
+import { Home as HomeIcon } from "lucide-react";
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -16,12 +19,16 @@ export default function Home() {
   });
 
   const { data: searchResults, isLoading: searchLoading } = useQuery<Book[]>({
-    queryKey: ["/api/books/search", { q: searchQuery }],
+    queryKey: [`/api/books/search?q=${encodeURIComponent(searchQuery)}`],
     enabled: searchQuery.length > 0,
   });
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
+  };
+
+  const clearSearch = () => {
+    setSearchQuery("");
   };
 
   if (featuredLoading || trendingLoading) {
@@ -36,7 +43,14 @@ export default function Home() {
 
       {searchQuery ? (
         <div className="mt-8">
-          <h2 className="text-2xl font-bold mb-6">Search Results</h2>
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold">Search Results</h2>
+            <Button variant="outline" onClick={clearSearch}>
+              <HomeIcon className="h-4 w-4 mr-2" />
+              Back to Home
+            </Button>
+          </div>
+
           {searchLoading ? (
             <div>Searching...</div>
           ) : searchResults && searchResults.length > 0 ? (

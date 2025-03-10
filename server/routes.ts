@@ -20,12 +20,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   app.get("/api/books/search", async (req, res) => {
-    const result = searchBooksSchema.safeParse({ query: req.query.q });
-    if (!result.success) {
-      return res.status(400).json({ message: "Invalid search query" });
+    try {
+      const query = req.query.q?.toString() || '';
+      const result = searchBooksSchema.safeParse({ query });
+
+      if (!result.success) {
+        return res.status(400).json({ message: "Invalid search query" });
+      }
+
+      const books = await storage.searchBooks(result.data.query);
+      res.json(books);
+    } catch (error) {
+      console.error('Search error:', error);
+      res.status(500).json({ message: "Search failed" });
     }
-    const books = await storage.searchBooks(result.data.query);
-    res.json(books);
   });
 
   app.post("/api/contact", async (req, res) => {
@@ -35,6 +43,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
     // In a real app, we would send an email or store the contact form submission
     res.json({ message: "Message sent successfully" });
+  });
+
+  // Add mock checkout endpoint
+  app.post("/api/checkout/create-payment-intent", async (req, res) => {
+    try {
+      const { amount } = req.body;
+      // For testing, return a mock client secret
+      res.json({
+        clientSecret: 'mock_client_secret',
+        amount: amount,
+        status: 'succeeded'
+      });
+    } catch (error) {
+      res.status(500).json({ message: "Payment processing failed" });
+    }
   });
 
   const httpServer = createServer(app);
