@@ -24,7 +24,7 @@ export class MemStorage implements IStorage {
         author: "Eleanor Night",
         price: 1999,
         description: "A thrilling fantasy novel about magic and destiny.",
-        coverUrl: "/attached_assets/1.png",
+        coverUrl: "attached_assets/1.png",
         featured: true,
         trending: false,
       },
@@ -33,7 +33,7 @@ export class MemStorage implements IStorage {
         author: "Marcus Sage",
         price: 2499,
         description: "An epic tale of ancient scrolls and hidden truths.",
-        coverUrl: "/attached_assets/2.png",
+        coverUrl: "attached_assets/2.png",
         featured: true,
         trending: true,
       },
@@ -42,7 +42,7 @@ export class MemStorage implements IStorage {
         author: "Sarah Starling",
         price: 1799,
         description: "A magical journey under the moonlight.",
-        coverUrl: "/attached_assets/3.png",
+        coverUrl: "attached_assets/3.png",
         featured: false,
         trending: true,
       },
@@ -51,7 +51,7 @@ export class MemStorage implements IStorage {
         author: "Isabella Crown",
         price: 2999,
         description: "A royal romance with a twist of fate.",
-        coverUrl: "/attached_assets/4.png",
+        coverUrl: "attached_assets/4.png",
         featured: true,
         trending: true,
       },
@@ -60,7 +60,7 @@ export class MemStorage implements IStorage {
         author: "Cyber Smith",
         price: 2199,
         description: "A cyberpunk adventure in a neon world.",
-        coverUrl: "/attached_assets/5.png",
+        coverUrl: "attached_assets/5.png",
         featured: false,
         trending: true,
       },
@@ -86,7 +86,7 @@ export class MemStorage implements IStorage {
 
   async searchBooks(query: string): Promise<Book[]> {
     const lowercaseQuery = query.toLowerCase();
-    return Array.from(this.books.values()).filter(book => 
+    return Array.from(this.books.values()).filter(book =>
       book.title.toLowerCase().includes(lowercaseQuery) ||
       book.author.toLowerCase().includes(lowercaseQuery)
     );

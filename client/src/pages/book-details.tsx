@@ -1,0 +1,52 @@
+import { useQuery } from "@tanstack/react-query";
+import { type Book } from "@shared/schema";
+import { useRoute } from "wouter";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft } from "lucide-react";
+import { Link } from "wouter";
+
+export default function BookDetails() {
+  const [, params] = useRoute<{ id: string }>("/book/:id");
+  const bookId = params?.id;
+
+  const { data: books } = useQuery<Book[]>({
+    queryKey: ["/api/books"],
+  });
+
+  const book = books?.find((b) => b.id === Number(bookId));
+
+  if (!book) {
+    return <div>Book not found</div>;
+  }
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <Link href="/">
+        <Button variant="ghost" className="mb-6">
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          Back to Books
+        </Button>
+      </Link>
+
+      <div className="grid md:grid-cols-2 gap-8">
+        <div>
+          <img
+            src={book.coverUrl}
+            alt={book.title}
+            className="w-full rounded-lg shadow-lg"
+          />
+        </div>
+        <div>
+          <h1 className="text-4xl font-bold mb-4">{book.title}</h1>
+          <p className="text-xl text-gray-600 mb-4">by {book.author}</p>
+          <p className="text-2xl font-bold text-primary mb-6">
+            ${(book.price / 100).toFixed(2)}
+          </p>
+          <div className="prose lg:prose-xl">
+            <p>{book.description}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
