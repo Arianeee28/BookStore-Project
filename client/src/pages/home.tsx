@@ -16,7 +16,7 @@ export default function Home() {
   });
 
   const { data: searchResults, isLoading: searchLoading } = useQuery<Book[]>({
-    queryKey: ["/api/books/search", searchQuery],
+    queryKey: ["/api/books/search", { q: searchQuery }],
     enabled: searchQuery.length > 0,
   });
 
@@ -30,18 +30,24 @@ export default function Home() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <SearchBar onSearch={handleSearch} />
+      <div className="mb-8">
+        <SearchBar onSearch={handleSearch} />
+      </div>
 
       {searchQuery ? (
         <div className="mt-8">
           <h2 className="text-2xl font-bold mb-6">Search Results</h2>
           {searchLoading ? (
             <div>Searching...</div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {searchResults?.map((book) => (
+          ) : searchResults && searchResults.length > 0 ? (
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+              {searchResults.map((book) => (
                 <BookCard key={book.id} book={book} />
               ))}
+            </div>
+          ) : (
+            <div className="text-center py-8 text-gray-500">
+              No books found matching "{searchQuery}"
             </div>
           )}
         </div>
@@ -49,7 +55,7 @@ export default function Home() {
         <>
           <div className="mt-8">
             <h2 className="text-2xl font-bold mb-6">Featured Books</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
               {featuredBooks?.map((book) => (
                 <BookCard key={book.id} book={book} />
               ))}
@@ -58,7 +64,7 @@ export default function Home() {
 
           <div className="mt-12">
             <h2 className="text-2xl font-bold mb-6">Trending Books</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
               {trendingBooks?.map((book) => (
                 <BookCard key={book.id} book={book} />
               ))}
