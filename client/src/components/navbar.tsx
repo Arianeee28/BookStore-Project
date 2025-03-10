@@ -1,7 +1,24 @@
 import { Link, useLocation } from "wouter";
+import { ShoppingCart } from "lucide-react";
+import { useEffect, useState } from "react";
 
 export function Navbar() {
   const [location] = useLocation();
+  const [cartCount, setCartCount] = useState(0);
+
+  useEffect(() => {
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    setCartCount(cart.length);
+
+    // Update cart count when storage changes
+    const handleStorageChange = () => {
+      const updatedCart = JSON.parse(localStorage.getItem('cart') || '[]');
+      setCartCount(updatedCart.length);
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
 
   return (
     <nav className="w-full bg-white border-b border-gray-200">
@@ -31,6 +48,16 @@ export function Navbar() {
             <Link href="/contact">
               <a className={`hover:text-primary ${location === "/contact" ? "text-primary" : "text-gray-600"}`}>
                 Contact
+              </a>
+            </Link>
+            <Link href="/cart">
+              <a className="relative hover:text-primary">
+                <ShoppingCart className="h-6 w-6" />
+                {cartCount > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-primary text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+                    {cartCount}
+                  </span>
+                )}
               </a>
             </Link>
           </div>

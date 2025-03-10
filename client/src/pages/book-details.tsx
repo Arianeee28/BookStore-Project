@@ -22,7 +22,17 @@ export default function BookDetails() {
   }
 
   const handleAddToCart = () => {
-    // In a real app, this would add to cart in a shopping cart context/state
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    const existingItem = cart.find((item: any) => item.id === book.id);
+
+    if (existingItem) {
+      existingItem.quantity += 1;
+    } else {
+      cart.push({ ...book, quantity: 1 });
+    }
+
+    localStorage.setItem('cart', JSON.stringify(cart));
+
     toast({
       title: "Added to Cart",
       description: `${book.title} has been added to your cart.`,
