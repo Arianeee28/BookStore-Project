@@ -85,10 +85,11 @@ export class MemStorage implements IStorage {
   }
 
   async searchBooks(query: string): Promise<Book[]> {
-    const lowercaseQuery = query.toLowerCase();
+    const lowercaseQuery = query.toLowerCase().trim();
     return Array.from(this.books.values()).filter(book =>
       book.title.toLowerCase().includes(lowercaseQuery) ||
-      book.author.toLowerCase().includes(lowercaseQuery)
+      book.author.toLowerCase().includes(lowercaseQuery) ||
+      book.description.toLowerCase().includes(lowercaseQuery)
     );
   }
 }
