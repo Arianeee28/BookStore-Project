@@ -29,7 +29,7 @@ bookstore-project/
 1. Clone the repository
 2. Install dependencies: `npm install`
 3. Start the development server: `npm run dev`
-4. Access the application at http://localhost:5000
+4. Access the application at [http://localhost:5000](https://bookstore-project-mdoj.onrender.com)
 
 ## Branch Structure
 
